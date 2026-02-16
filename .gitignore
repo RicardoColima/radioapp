@@ -10,11 +10,6 @@ lerna-debug.log*
 node_modules
 .DS_Store
 dist-ssr
-src/
-public/
-tailwind.config.js
-postcss.config.js
-jsconfig.json
 coverage
 *.local
 

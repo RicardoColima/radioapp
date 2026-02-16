@@ -59,7 +59,7 @@ export const useStationsStore = defineStore('stations', () => {
         ]);
         
         // Sort and filter useful data
-        availableCountries.value = countries.sort((a, b) => b.stationcount - a.stationcount).slice(0, 30);
+        availableCountries.value = countries.sort((a, b) => b.stationcount - a.stationcount).slice(0, 300);
         availableLanguages.value = languages.sort((a, b) => b.stationcount - a.stationcount).slice(0, 20);
         availableTags.value = tags.sort((a, b) => b.stationcount - a.stationcount).slice(0, 30);
     } catch (e) {

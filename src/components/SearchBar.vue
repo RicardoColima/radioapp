@@ -29,7 +29,7 @@ const onInput = () => {
 <template>
   <div class="relative w-full max-w-md">
     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-      <MagnifyingGlassIcon class="w-5 h-5 text-gray-400" />
+      <MagnifyingGlassIcon class="w-5 h-5 text-primary" />
     </div>
     <input 
       v-model="query"

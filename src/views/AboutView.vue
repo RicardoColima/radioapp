@@ -2,7 +2,7 @@
   <div class="p-6 pb-24 min-h-screen text-white">
     <div class="max-w-3xl mx-auto">
       <header class="mb-10 text-center">
-        <h1 class="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+        <h1 class="text-4xl font-bold mb-4 bg-clip-text text-white ">
           Acerca de RadioApp
         </h1>
         <p class="text-gray-400 text-lg">Tu destino para descubrir música global.</p>

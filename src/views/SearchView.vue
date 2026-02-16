@@ -121,13 +121,13 @@ watch(() => route.query, () => {
             class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#282828] text-white text-sm font-bold hover:bg-[#333] transition-colors"
             :class="{ '!bg-green-500 !text-black': showFilters }"
           >
-            <FunnelIcon class="w-4 h-4" />
+            <FunnelIcon class="w-4 h-4 text-primary" :class="{ '!text-black': showFilters }" />
             Filtros
           </button>
 
           <!-- Sort Select -->
           <div class="flex items-center bg-[#282828] rounded-full px-3 py-2">
-             <ArrowsUpDownIcon class="w-4 h-4 text-gray-400 mr-2" />
+             <ArrowsUpDownIcon class="w-4 h-4 text-primary mr-2" />
              <select 
                 v-model="filters.sort" 
                 @change="updateFilter"

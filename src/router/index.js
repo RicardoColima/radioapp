@@ -30,6 +30,11 @@ const router = createRouter({
       component: CategoriesView
     },
     {
+      path: '/countries',
+      name: 'countries',
+      component: () => import('../views/CountriesView.vue')
+    },
+    {
       path: '/station/:id',
       name: 'station-detail',
       component: StationDetailView
@@ -38,6 +43,11 @@ const router = createRouter({
       path: '/acerca',
       name: 'about',
       component: AboutView
+    },
+    {
+      path: '/country/:name',
+      name: 'country-stations',
+      component: () => import('../views/CountryStationsView.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

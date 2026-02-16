@@ -1,13 +1,14 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { HomeIcon, MagnifyingGlassIcon, HeartIcon, TagIcon, InformationCircleIcon } from '@heroicons/vue/24/outline';
-import { HomeIcon as HomeSolid, MagnifyingGlassIcon as SearchSolid, HeartIcon as HeartSolid, TagIcon as TagSolid, InformationCircleIcon as InfoSolid } from '@heroicons/vue/24/solid';
+import { HomeIcon, MagnifyingGlassIcon, HeartIcon, TagIcon, InformationCircleIcon, GlobeAmericasIcon } from '@heroicons/vue/24/outline';
+import { HomeIcon as HomeSolid, MagnifyingGlassIcon as SearchSolid, HeartIcon as HeartSolid, TagIcon as TagSolid, InformationCircleIcon as InfoSolid, GlobeAmericasIcon as GlobeSolid } from '@heroicons/vue/24/solid';
 
 const route = useRoute();
 
 const navItems = [
   { name: 'Inicio', path: '/', icon: HomeIcon, activeIcon: HomeSolid },
   { name: 'Buscar', path: '/search', icon: MagnifyingGlassIcon, activeIcon: SearchSolid },
+  { name: 'Países', path: '/countries', icon: GlobeAmericasIcon, activeIcon: GlobeSolid },
   { name: 'Favoritos', path: '/favorites', icon: HeartIcon, activeIcon: HeartSolid },
   { name: 'Categorías', path: '/categories', icon: TagIcon, activeIcon: TagSolid },
   { name: 'Acerca de', path: '/acerca', icon: InformationCircleIcon, activeIcon: InfoSolid },
@@ -16,7 +17,7 @@ const navItems = [
 
 <template>
   <!-- Desktop Sidebar -->
-  <aside class="hidden md:flex flex-col w-64 h-screen bg-black text-white p-6 fixed left-0 top-0 z-40">
+  <aside class="hidden md:flex flex-col w-64 h-screen bg-black text-white p-6 fixed left-0 top-0 z-40 border-r border-gray-900">
     <div class="flex items-center gap-2 mb-10 px-2">
       <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
         <span class="font-bold text-black text-xl">R</span>
@@ -32,7 +33,7 @@ const navItems = [
         class="flex items-center gap-4 px-4 py-3 rounded-md transition-colors text-gray-400 hover:text-white hover:bg-white/10"
         :class="{ '!text-white !bg-white/10 font-medium': route.path === item.path }"
       >
-        <component :is="route.path === item.path ? item.activeIcon : item.icon" class="w-6 h-6" />
+        <component :is="route.path === item.path ? item.activeIcon : item.icon" class="w-6 h-6 text-primary" />
         <span>{{ item.name }}</span>
       </router-link>
     </nav>
@@ -51,7 +52,7 @@ const navItems = [
       class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-white"
       :class="{ '!text-white': route.path === item.path }"
     >
-      <component :is="route.path === item.path ? item.activeIcon : item.icon" class="w-6 h-6 mb-1" />
+      <component :is="route.path === item.path ? item.activeIcon : item.icon" class="w-6 h-6 mb-1 text-primary" />
       <span class="text-[10px]">{{ item.name }}</span>
     </router-link>
   </nav>
