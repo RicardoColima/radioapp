@@ -23,10 +23,10 @@ class RadioApiService {
       try {
         await axios.get(`${url}/servers`, { timeout: 2000 });
         this.baseUrl = url;
-        console.log(`Connected to Radio Browser API: ${this.baseUrl}`);
+        // console.log(`Connected to Radio Browser API: ${this.baseUrl}`);
         break;
       } catch (e) {
-        console.warn(`Failed to connect to ${url}, trying next...`);
+        // console.warn(`Failed to connect to ${url}, trying next...`);
       }
     }
   }
@@ -36,13 +36,16 @@ class RadioApiService {
     if (cache.has(cacheKey)) {
       const { data, timestamp } = cache.get(cacheKey);
       if (Date.now() - timestamp < CACHE_DURATION) {
+        // console.log('Returning cached data for:', endpoint);
         return data;
       }
       cache.delete(cacheKey);
     }
 
     try {
+      // console.log(`Making API call to: ${this.baseUrl}${endpoint} with params:`, params);
       const response = await axios.get(`${this.baseUrl}${endpoint}`, { params });
+      // console.log('API response received:', response.data);
       cache.set(cacheKey, { data: response.data, timestamp: Date.now() });
       return response.data;
     } catch (error) {
@@ -63,7 +66,10 @@ class RadioApiService {
     if (tag) params.tag = tag;
     if (bitrateMin) params.bitrateMin = bitrateMin;
     
-    return this.get('/stations/search', params);
+    // console.log('API searchStations called with params:', params);
+    const result = await this.get('/stations/search', params);
+    // console.log('API searchStations result:', result);
+    return result;
   }
 
   async getStationsByCountry(country, limit = 20) {

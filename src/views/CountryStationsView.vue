@@ -29,24 +29,24 @@ const loading = ref(true);
 const error = ref(null);
 
 const fetchStations = async () => {
-  console.log('Fetching stations for:', countryName.value);
+  // console.log('Fetching stations for:', countryName.value);
   loading.value = true;
   error.value = null;
   try {
     if (countryName.value === 'uncategorized') {
-      console.log('Searching uncategorized stations');
+      // console.log('Searching uncategorized stations');
       stations.value = await radioApi.searchStations({ country: '', limit: 100 });
     } else {
-      console.log('Calling API for country:', countryName.value);
+      // console.log('Calling API for country:', countryName.value);
       stations.value = await radioApi.getStationsByCountry(countryName.value, 100);
-      console.log('Stations loaded:', stations.value.length);
+      // console.log('Stations loaded:', stations.value.length);
     }
   } catch (e) {
     console.error('Error fetching stations:', e);
     error.value = 'Error al cargar las estaciones.';
   } finally {
     loading.value = false;
-    console.log('Loading set to false');
+    // console.log('Loading set to false');
   }
 };
 

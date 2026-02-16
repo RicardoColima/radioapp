@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { HomeIcon, MagnifyingGlassIcon, HeartIcon, TagIcon, InformationCircleIcon, GlobeAmericasIcon } from '@heroicons/vue/24/outline';
-import { HomeIcon as HomeSolid, MagnifyingGlassIcon as SearchSolid, HeartIcon as HeartSolid, TagIcon as TagSolid, InformationCircleIcon as InfoSolid, GlobeAmericasIcon as GlobeSolid } from '@heroicons/vue/24/solid';
+import { HomeIcon, MagnifyingGlassIcon, HeartIcon, TagIcon, InformationCircleIcon, GlobeAmericasIcon, SparklesIcon } from '@heroicons/vue/24/outline';
+import { HomeIcon as HomeSolid, MagnifyingGlassIcon as SearchSolid, HeartIcon as HeartSolid, TagIcon as TagSolid, InformationCircleIcon as InfoSolid, GlobeAmericasIcon as GlobeSolid, SparklesIcon as SparklesSolid } from '@heroicons/vue/24/solid';
 
 const route = useRoute();
 
@@ -11,6 +11,7 @@ const navItems = [
   { name: 'Países', path: '/countries', icon: GlobeAmericasIcon, activeIcon: GlobeSolid },
   { name: 'Favoritos', path: '/favorites', icon: HeartIcon, activeIcon: HeartSolid },
   { name: 'Categorías', path: '/categories', icon: TagIcon, activeIcon: TagSolid },
+  { name: 'Aleatorio', path: '/random', icon: SparklesIcon, activeIcon: SparklesSolid },
   { name: 'Acerca de', path: '/acerca', icon: InformationCircleIcon, activeIcon: InfoSolid },
 ];
 </script>

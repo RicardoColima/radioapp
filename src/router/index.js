@@ -48,6 +48,11 @@ const router = createRouter({
       path: '/country/:name',
       name: 'country-stations',
       component: () => import('../views/CountryStationsView.vue')
+    },
+    {
+      path: '/random',
+      name: 'random',
+      component: () => import('../views/RandomView.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) {
