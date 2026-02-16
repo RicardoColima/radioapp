@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #1DB954; /* Spotify green-ish */
+  --color-dark: #121212;
+  --color-dark-lighter: #282828;
+  --color-text: #FFFFFF;
+  --color-text-secondary: #B3B3B3;
+}
+
+body {
+  @apply bg-gray-900 text-white antialiased;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}
