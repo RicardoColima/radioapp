@@ -1,56 +1,56 @@
-# 📻 Vue 3 Radio App
+# 📻 Aplicación de Radio Vue 3
 
-A modern, responsive web application for streaming radio stations from around the world. Built with Vue 3, Vite, Pinia, and TailwindCSS.
+Una aplicación web moderna y responsiva para streaming de estaciones de radio de todo el mundo. Construida con Vue 3, Vite, Pinia y TailwindCSS.
 
-## 🚀 Features
+## 🚀 Características
 
-- **Global Player**: Persistent audio player that continues playing while you navigate.
-- **Search**: Find stations by name, country, language, or genre.
-- **Favorites**: Save your favorite stations (persisted locally).
-- **Custom Categories**: Organize stations into your own playlists/categories.
-- **Responsive Design**: Mobile-first approach, looks great on all devices.
-- **Dark Mode**: Sleek dark theme inspired by Spotify.
+- **Reproductor Global**: Reproductor de audio persistente que continúa reproduciendo mientras navegas.
+- **Búsqueda**: Encuentra estaciones por nombre, país, idioma o género.
+- **Favoritos**: Guarda tus estaciones favoritas (persistidas localmente).
+- **Categorías Personalizadas**: Organiza estaciones en tus propias listas de reproducción/categorías.
+- **Diseño Responsivo**: Enfoque mobile-first, se ve genial en todos los dispositivos.
+- **Modo Oscuro**: Elegante tema oscuro inspirado en Spotify.
 
-## 🛠 Tech Stack
+## 🛠 Stack Tecnológico
 
 - **Framework**: Vue 3 (Composition API)
-- **Build Tool**: Vite
-- **State Management**: Pinia
+- **Herramienta de Build**: Vite
+- **Gestión de Estado**: Pinia
 - **Routing**: Vue Router
-- **Styling**: TailwindCSS
-- **Icons**: Heroicons
-- **HTTP Client**: Axios
+- **Estilos**: TailwindCSS
+- **Iconos**: Heroicons
+- **Cliente HTTP**: Axios
 - **API**: [Radio Browser API](https://www.radio-browser.info/)
 
-## 📦 Installation & Setup
+## 📦 Instalación y Configuración
 
-1.  **Install dependencies**
+1.  **Instalar dependencias**
 
     ```bash
     npm install
     ```
 
-2.  **Run Development Server**
+2.  **Ejecutar Servidor de Desarrollo**
 
     ```bash
     npm run dev
     ```
 
-3.  **Build for Production**
+3.  **Construir para Producción**
 
     ```bash
     npm run build
     ```
 
-## 📱 Architecture
+## 📱 Arquitectura
 
-- **`src/services/api.js`**: Handles communication with the Radio Browser API, including server fallback and caching.
-- **`src/stores/player.js`**: Manages global audio state (playing, volume, current station).
-- **`src/stores/stations.js`**: Manages data fetching, favorites, and user categories.
-- **`src/components/Player.vue`**: The persistent footer player.
-- **`src/views/`**: Page components for routing.
+- **`src/services/api.js`**: Maneja la comunicación con la Radio Browser API, incluyendo fallback de servidor y caché.
+- **`src/stores/player.js`**: Gestiona el estado global de audio (reproducción, volumen, estación actual).
+- **`src/stores/stations.js`**: Gestiona la obtención de datos, favoritos y categorías de usuario.
+- **`src/components/Player.vue`**: El reproductor persistente en el pie de página.
+- **`src/views/`**: Componentes de página para routing.
 
-## 📝 Notes
+## 📝 Notas
 
-- The app uses `localStorage` to persist volume settings, favorites, and custom categories.
-- The Radio Browser API is free and open community-driven.
+- La aplicación usa `localStorage` para persistir configuración de volumen, favoritos y categorías personalizadas.
+- La Radio Browser API es gratuita y abierta, impulsada por la comunidad.
