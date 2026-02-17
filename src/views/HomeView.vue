@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router';
 import { useStationsStore } from '../stores/stations';
 import { usePlayerStore } from '../stores/player';
 import StationCard from '../components/StationCard.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
 import { PlayIcon, MagnifyingGlassIcon, ArrowPathIcon } from '@heroicons/vue/24/solid';
 import { radioApi } from '../services/api';
 import { onClickOutside } from '@vueuse/core';
@@ -215,6 +217,9 @@ const reloadDiscovery = () => {
       <!-- Skeleton Hero -->
       <div v-else class="h-[250px] md:h-[350px] bg-[#181818] rounded-xl mb-10 animate-pulse"></div>
     
+      <!-- Ad Banner - Top -->
+      <AdBanner />
+    
     <!-- Recently Played (History) -->
     <section v-if="store.history.length > 0" class="mb-12">
       <div class="flex justify-between items-end mb-6">
@@ -242,6 +247,9 @@ const reloadDiscovery = () => {
         </template>
       </div>
     </section>
+
+    <!-- Ad Inline - Middle -->
+    <AdInline position="middle" />
 
     <!-- Trending (8 items - Most Voted) -->
     <section class="mb-12">
@@ -384,6 +392,9 @@ const reloadDiscovery = () => {
         </template>
       </div>
     </section>
+
+    <!-- Ad Inline - Bottom -->
+    <AdInline position="bottom" />
 
     </template>
 

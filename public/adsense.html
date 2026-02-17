@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración AdSense - RadioApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1DB954;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #1DB954;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        .ad-slot {
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .placement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .placement-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .placement-card h3 {
+            color: #1DB954;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📻 Configuración Google AdSense - RadioApp</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Importante:</strong> Esta es una simulación para demostrar dónde se colocarían los anuncios de Google AdSense. 
+            Para usar AdSense real, necesitas una cuenta aprobada de Google y el código JavaScript real.
+        </div>
+
+        <h2>📍 Ubicaciones de Anuncios Implementadas</h2>
+        
+        <div class="placement-grid">
+            <div class="placement-card">
+                <h3>🏠 Home - Banner Superior</h3>
+                <p>Después del carrusel principal</p>
+                <div class="ad-slot">
+                    <strong>Formato:</strong> Banner horizontal (728x90 o adaptable)<br>
+                    <strong>Slot ID:</strong> banner-top<br>
+                    <strong>Visibilidad:</strong> Alta - Primera vista del usuario
+                </div>
+            </div>
+
+            <div class="placement-card">
+                <h3>🏠 Home - Medio</h3>
+                <p>Entre "Más Populares" y "Tendencias"</p>
+                <div class="ad-slot">
+                    <strong>Formato:</strong> Rectángulo (300x250 o adaptable)<br>
+                    <strong>Slot ID:</strong> inline-middle<br>
+                    <strong>Visibilidad:</strong> Media - Usuario navegando contenido
+                </div>
+            </div>
+
+            <div class="placement-card">
+                <h3>🏠 Home - Inferior</h3>
+                <p>Antes de finalizar la página</p>
+                <div class="ad-slot">
+                    <strong>Formato:</strong> Banner horizontal o responsive<br>
+                    <strong>Slot ID:</strong> inline-bottom<br>
+                    <strong>Visibilidad:</strong> Media - Usuario finalizando scroll
+                </div>
+            </div>
+
+            <div class="placement-card">
+                <h3>🔍 Búsqueda - Resultados</h3>
+                <p>Después de los resultados de búsqueda</p>
+                <div class="ad-slot">
+                    <strong>Formato:</strong> Responsive o rectángulo<br>
+                    <strong>Slot ID:</strong> inline-search<br>
+                    <strong>Visibilidad:</strong> Alta - Usuario buscando activamente
+                </div>
+            </div>
+
+            <div class="placement-card">
+                <h3>🌍 Países - Sidebar (Desktop)</h3>
+                <p>Columna lateral en vista de países</p>
+                <div class="ad-slot">
+                    <strong>Formato:</strong> Vertical (160x600 o 300x600)<br>
+                    <strong>Slot ID:</strong> sidebar-vertical<br>
+                    <strong>Visibilidad:</strong> Media - Solo en desktop
+                </div>
+            </div>
+
+            <div class="placement-card">
+                <h3>🎵 Detalles Estación - Inferior</h3>
+                <p>Después de detalles y estaciones relacionadas</p>
+                <div class="ad-slot">
+                    <strong>Formato:</strong> Responsive<br>
+                    <strong>Slot ID:</strong> station-detail<br>
+                    <strong>Visibilidad:</strong> Alta - Usuario interesado en contenido
+                </div>
+            </div>
+        </div>
+
+        <h2>🔧 Código para Implementación Real</h2>
+        
+        <h3>1. Configuración en index.html</h3>
+        <div class="code-block">
+&lt;!-- Agregar en head --&gt;
+&lt;script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"&gt;&lt;/script&gt;
+
+&lt;!-- Agregar en body --&gt;
+&lt;ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+     data-ad-slot="XXXXXXXXXX"
+     data-ad-format="auto"
+     data-full-width-responsive="true"&gt;&lt;/ins&gt;
+&lt;script&gt;
+     (adsbygoogle = window.adsbygoogle || []).push({});
+&lt;/script&gt;
+        </div>
+
+        <h3>2. Componente AdSense Real</h3>
+        <div class="code-block">
+&lt;template&gt;
+  &lt;div class="ad-container"&gt;
+    &lt;ins 
+      class="adsbygoogle"
+      :style="{ display: 'block' }"
+      :data-ad-client="adClient"
+      :data-ad-slot="adSlot"
+      :data-ad-format="adFormat"
+      :data-full-width-responsive="fullWidth ? 'true' : 'false'"
+    &gt;&lt;/ins&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+const props = defineProps({
+  adSlot: String,
+  adFormat: { type: String, default: 'auto' },
+  fullWidth: { type: Boolean, default: false }
+});
+
+const adClient = 'ca-pub-XXXXXXXXXXXXXXXX'; // Tu ID de cliente
+
+onMounted(() => {
+  (window.adsbygoogle = window.adsbygoogle || []).push({});
+});
+&lt;/script&gt;
+        </div>
+
+        <h2>📊 Estrategia de Anuncios No Intrusiva</h2>
+        
+        <div class="success">
+            <h3>✅ Buenas Prácticas Implementadas:</h3>
+            <ul>
+                <li><strong>Ubicaciones naturales:</strong> Anuncios entre contenido, no interrumpiendo</li>
+                <li><strong>Formatos responsivos:</strong> Se adaptan a móvil y desktop</li>
+                <li><strong>Límite de anuncios:</strong> Máximo 3-4 por página para no saturar</li>
+                <li><strong>Simulación visual:</strong> Los usuarios saben qué son anuncios</li>
+                <li><strong>Experiencia primero:</strong> El contenido principal siempre es prioridad</li>
+            </ul>
+        </div>
+
+        <h2>🚀 Próximos Pasos para Implementación Real</h2>
+        
+        <ol>
+            <li><strong>Crear cuenta AdSense:</strong> Solicitar aprobación en google.com/adsense</li>
+            <li><strong>Verificar sitio:</strong> Añadir archivo de verificación DNS o meta tag</li>
+            <li><strong>Obtener código:</strong> Recibir ID de cliente (ca-pub-XXXXXXXX)</li>
+            <li><strong>Crear unidades:</strong> Generar slots para cada ubicación</li>
+            <li><strong>Reemplazar simulación:</strong> Usar código real en componentes</li>
+            <li><strong>Configurar pagos:</strong> Vincular cuenta bancaria</li>
+            <li><strong>Monitorear rendimiento:</strong> Revisar dashboard de AdSense</li>
+        </ol>
+
+        <div class="warning">
+            <strong>⚠️ Recordatorio:</strong> La simulación actual solo muestra dónde irían los anuncios. 
+            No genera ingresos reales y es solo para propósitos de diseño y UX.
+        </div>
+
+        <h2>💰 Estimaciones de Ingresos (Proyectadas)</h2>
+        
+        <div class="placement-grid">
+            <div class="placement-card">
+                <h3>Tráfico Bajo (1K usuarios/día)</h3>
+                <p><strong>CPM estimado:</strong> $0.50 - $2.00<br>
+                <strong>Ingresos mensuales:</strong> $15 - $60</p>
+            </div>
+            <div class="placement-card">
+                <h3>Tráfico Medio (5K usuarios/día)</h3>
+                <p><strong>CPM estimado:</strong> $1.00 - $3.50<br>
+                <strong>Ingresos mensuales:</strong> $75 - $262</p>
+            </div>
+            <div class="placement-card">
+                <h3>Tráfico Alto (10K+ usuarios/día)</h3>
+                <p><strong>CPM estimado:</strong> $1.50 - $5.00<br>
+                <strong>Ingresos mensuales:</strong> $225 - $750</p>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; color: #666;">
+            <em>Esta simulación fue creada para RadioApp - © 2024</em>
+        </p>
+    </div>
+</body>
+</html>

@@ -3,6 +3,8 @@ import { ref, computed, watch } from 'vue';
 import { useStationsStore } from '../stores/stations';
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import StationCard from '../components/StationCard.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
 
 const store = useStationsStore();
 store.init();
@@ -64,6 +66,9 @@ const removeFromCategory = (stationId) => {
       </button>
     </header>
     
+    <!-- Ad Banner - Categories -->
+    <AdBanner />
+    
     <!-- Inline Create Form -->
     <div v-if="showCreateModal" class="mb-6 bg-[#282828] p-4 rounded-lg flex gap-2">
       <input 
@@ -118,6 +123,9 @@ const removeFromCategory = (stationId) => {
         <p class="text-sm text-gray-500">Agrega estaciones desde el Buscador o el Home.</p>
       </div>
     </div>
+
+    <!-- Ad Inline - Categories -->
+    <AdInline position="categories" v-if="activeCategoryId" />
 
     <div v-else class="text-center py-20">
        <p class="text-gray-400">Crea una categoría para organizar tus estaciones.</p>

@@ -3,6 +3,8 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { radioApi } from '../services/api';
 import StationCard from '../components/StationCard.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline';
 
 const route = useRoute();
@@ -82,6 +84,9 @@ const goBack = () => {
       <p class="text-gray-400">Explora las mejores radios de {{ displayTitle }}</p>
     </header>
 
+    <!-- Ad Banner - Country Stations -->
+    <AdBanner />
+
     <div v-if="loading" class="flex justify-center items-center py-20">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>
@@ -108,6 +113,9 @@ const goBack = () => {
         />
       </TransitionGroup>
     </div>
+
+    <!-- Ad Inline - Country Stations -->
+    <AdInline position="country-stations" />
   </div>
 </template>
 

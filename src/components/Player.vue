@@ -5,6 +5,7 @@ import { usePlayerStore } from '../stores/player';
 import { useStationsStore } from '../stores/stations';
 import { PlayIcon, PauseIcon, SpeakerWaveIcon, SpeakerXMarkIcon, HeartIcon } from '@heroicons/vue/24/solid';
 import { HeartIcon as HeartIconOutline } from '@heroicons/vue/24/outline';
+import ShareButton from './ShareButton.vue';
 
 const router = useRouter();
 const playerStore = usePlayerStore();
@@ -73,6 +74,12 @@ const fallbackImage = (e) => {
       <button @click.stop="toggleFavorite" class="ml-2 text-[#b3b3b3] hover:text-white transition-colors">
         <component :is="isFavorite ? HeartIcon : HeartIconOutline" class="w-5 h-5" :class="{ 'text-green-500': isFavorite }" />
       </button>
+      <ShareButton 
+        v-if="station"
+        :station="station" 
+        size="small"
+        class="ml-2 text-[#b3b3b3] hover:text-white transition-colors"
+      />
     </div>
 
     <!-- Controls -->

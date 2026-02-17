@@ -2,6 +2,8 @@
 import { computed } from 'vue';
 import { useStationsStore } from '../stores/stations';
 import StationCard from '../components/StationCard.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
 import { HeartIcon } from '@heroicons/vue/24/solid';
 
 const store = useStationsStore();
@@ -24,6 +26,9 @@ const hasFavorites = computed(() => store.favorites.length > 0);
       </div>
     </div>
 
+    <!-- Ad Banner - Favorites -->
+    <AdBanner />
+
     <div v-if="hasFavorites" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
       <StationCard 
         v-for="station in store.favorites" 
@@ -31,6 +36,9 @@ const hasFavorites = computed(() => store.favorites.length > 0);
         :station="station" 
       />
     </div>
+
+    <!-- Ad Inline - Favorites -->
+    <AdInline position="favorites" v-if="hasFavorites" />
 
     <div v-else class="flex flex-col items-center justify-center py-20 text-center">
       <p class="text-gray-400">Aún no has agregado estaciones a tus favoritos.</p>

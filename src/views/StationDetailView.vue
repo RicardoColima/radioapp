@@ -5,6 +5,9 @@ import { useStationsStore } from '../stores/stations';
 import { usePlayerStore } from '../stores/player';
 import { radioApi } from '../services/api';
 import StationCard from '../components/StationCard.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
+import ShareButton from '../components/ShareButton.vue';
 import { PlayIcon, PauseIcon, HeartIcon, PlusIcon, HandThumbUpIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { HeartIcon as HeartIconOutline, HandThumbUpIcon as HandThumbUpOutline } from '@heroicons/vue/24/outline';
 import { onClickOutside } from '@vueuse/core';
@@ -262,6 +265,12 @@ onMounted(() => {
                     <component :is="hasVoted ? HandThumbUpIcon : HandThumbUpOutline" class="w-6 h-6" />
                     <span class="font-bold">{{ station.votes }}</span>
                 </button>
+
+                <ShareButton 
+                  :station="station" 
+                  size="normal"
+                  class="p-3 rounded-full border border-gray-500 hover:border-white text-gray-400 hover:text-white transition-colors"
+                />
             </div>
         </div>
       </div>
@@ -303,6 +312,9 @@ onMounted(() => {
         </div>
         <div v-else class="text-gray-400">No se encontraron estaciones relacionadas.</div>
       </div>
+
+      <!-- Ad Inline - Station Detail -->
+      <AdInline position="station-detail" />
     </div>
   </div>
 </template>

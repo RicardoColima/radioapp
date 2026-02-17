@@ -5,6 +5,8 @@ import { useStationsStore } from '../stores/stations';
 import { GlobeAmericasIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline';
 import { SparklesIcon } from '@heroicons/vue/24/solid';
 import SearchBar from '../components/SearchBar.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
 
 const store = useStationsStore();
 const router = useRouter();
@@ -127,6 +129,9 @@ const processedCountries = computed(() => {
       </div>
     </header>
 
+    <!-- Ad Banner - Countries -->
+    <AdBanner />
+
     <div v-if="store.loading && store.availableCountries.length === 0" class="flex justify-center items-center py-20">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>
@@ -164,6 +169,9 @@ const processedCountries = computed(() => {
         </router-link>
       </TransitionGroup>
     </div>
+
+    <!-- Ad Inline - Countries -->
+    <AdInline position="countries" />
 
     <div v-if="!store.loading && processedCountries.length === 0" class="text-center py-20 text-gray-500">
       No se encontraron países.

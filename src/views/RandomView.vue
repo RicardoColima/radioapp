@@ -7,6 +7,9 @@ import { radioApi } from '../services/api';
 import { PlayIcon, PauseIcon, HeartIcon, PlusIcon, HandThumbUpIcon, SparklesIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
 import { HeartIcon as HeartIconOutline, HandThumbUpIcon as HandThumbUpOutline } from '@heroicons/vue/24/outline';
 import { onClickOutside } from '@vueuse/core';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
+import ShareButton from '../components/ShareButton.vue';
 
 const router = useRouter();
 const stationsStore = useStationsStore();
@@ -263,6 +266,13 @@ onMounted(() => {
                     <SparklesIcon class="w-5 h-5" :class="{ 'animate-spin': loading }" />
                     Descubrir Otra
                 </button>
+
+                <ShareButton 
+                  v-if="currentStation"
+                  :station="currentStation" 
+                  size="normal"
+                  class="p-3 rounded-full border border-gray-500 hover:border-white text-gray-400 hover:text-white transition-colors"
+                />
             </div>
         </div>
       </div>
@@ -286,6 +296,9 @@ onMounted(() => {
               <a :href="currentStation.homepage" target="_blank" class="text-green-500 hover:underline block truncate">{{ currentStation.homepage }}</a>
           </div>
       </div>
+
+      <!-- Ad Inline - Random Station -->
+      <AdInline position="random" />
     </div>
   </div>
 </template>

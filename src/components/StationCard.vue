@@ -5,6 +5,7 @@ import { usePlayerStore } from '../stores/player';
 import { useStationsStore } from '../stores/stations';
 import { PlayIcon, PauseIcon, HeartIcon, PlusIcon } from '@heroicons/vue/24/solid';
 import { HeartIcon as HeartIconOutline } from '@heroicons/vue/24/outline';
+import ShareButton from './ShareButton.vue';
 
 const props = defineProps({
   station: {
@@ -101,6 +102,11 @@ const fallbackImage = (e) => {
              <button @click.stop="togglePlay" class="text-white">
                 <component :is="isPlaying ? PauseIcon : PlayIcon" class="w-5 h-5" />
              </button>
+             <ShareButton 
+               :station="station" 
+               size="small"
+               class="text-white"
+             />
           </div>
       </div>
       
@@ -131,6 +137,12 @@ const fallbackImage = (e) => {
         >
         <PlusIcon class="w-5 h-5" />
         </button>
+
+        <ShareButton 
+          :station="station" 
+          size="small"
+          class="p-2 rounded-full bg-black/50 text-white hover:text-green-500 hover:scale-110 transition-all"
+        />
     </div>
     
     <!-- Mobile specific Add button (bottom right) -->

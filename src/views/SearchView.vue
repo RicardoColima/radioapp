@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { useStationsStore } from '../stores/stations';
 import StationCard from '../components/StationCard.vue';
 import SearchBar from '../components/SearchBar.vue';
+import AdBanner from '../components/AdBanner.vue';
+import AdInline from '../components/AdInline.vue';
 import { FunnelIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline';
 
 const store = useStationsStore();
@@ -226,6 +228,9 @@ watch(() => route.query, () => {
           :station="station" 
         />
       </div>
+      
+      <!-- Ad Inline - Search Results -->
+      <AdInline position="search" />
     </div>
 
     <div v-else class="flex flex-col items-center justify-center py-20 text-center">
