@@ -4,6 +4,7 @@ import { RouterView, useRouter, useRoute } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 import Player from './components/Player.vue';
 import CategoryModal from './components/CategoryModal.vue';
+import PwaInstallPrompt from './components/PwaInstallPrompt.vue';
 import { usePlayerStore } from './stores/player';
 import { useStationsStore } from './stores/stations';
 import { useSwipe } from '@vueuse/core';
@@ -55,6 +56,7 @@ onMounted(() => {
     
     <!-- Global Modals -->
     <CategoryModal />
+    <PwaInstallPrompt />
   </div>
 </template>
 

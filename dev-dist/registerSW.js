@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/radioapp/dev-sw.js?dev-sw', { scope: '/radioapp/', type: 'classic' })
