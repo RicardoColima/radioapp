@@ -46,24 +46,27 @@ watch(() => route.path, (toPath, fromPath) => {
 // Swipe Navigation
 const { direction, isSwiping, lengthX, lengthY } = useSwipe(mainContent, {
   passive: false,
+  threshold: 30, // Native threshold support
   onSwipeEnd(e, direction) {
     const currentPath = route.path;
     const currentIndex = mainTabs.indexOf(currentPath);
-    const swipeThreshold = 50; // Minimum distance to trigger swipe
-
-    // Check if movement is horizontal (horizontal distance > vertical distance)
+    
+    // Check if movement is predominantly horizontal
+    // Allow slight vertical movement but ensure horizontal is dominant
     const isHorizontalSwipe = Math.abs(lengthX.value) > Math.abs(lengthY.value);
+
+    // console.log('Swipe:', direction, 'X:', lengthX.value, 'Y:', lengthY.value, 'Horizontal:', isHorizontalSwipe);
 
     if (!isHorizontalSwipe) return;
 
     // If we are on a main tab
     if (currentIndex !== -1) {
-       if (direction === 'left' && Math.abs(lengthX.value) > swipeThreshold) {
+       if (direction === 'left') {
          // Next Tab
          if (currentIndex < mainTabs.length - 1) {
            router.push(mainTabs[currentIndex + 1]);
          }
-       } else if (direction === 'right' && Math.abs(lengthX.value) > swipeThreshold) {
+       } else if (direction === 'right') {
          // Previous Tab
          if (currentIndex > 0) {
            router.push(mainTabs[currentIndex - 1]);
@@ -71,7 +74,7 @@ const { direction, isSwiping, lengthX, lengthY } = useSwipe(mainContent, {
        }
     } else {
       // If NOT on a main tab (e.g. details page), Swipe Right to Go Back
-      if (direction === 'right' && lengthX.value < -swipeThreshold) {
+      if (direction === 'right') {
          router.back();
       }
     }
@@ -90,7 +93,11 @@ onMounted(() => {
     <NavBar />
 
     <!-- Main Content Area -->
-    <main id="main-content" ref="mainContent" class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212] overflow-x-hidden">
+    <main 
+      id="main-content" 
+      ref="mainContent" 
+      class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212] overflow-x-hidden touch-pan-y overscroll-x-none"
+    >
       <div class="min-h-full pb-24"> <!-- Padding for bottom player -->
         <RouterView v-slot="{ Component }">
           <Transition :name="transitionName" mode="out-in">
