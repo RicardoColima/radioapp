@@ -264,7 +264,7 @@ export const useStationsStore = defineStore('stations', () => {
   };
 
   const createCategory = (name) => {
-    if (!name.trim()) return;
+    if (!name.trim()) return null;
     const newCat = {
       id: Date.now().toString(), // Simple ID generation
       name: name.trim(),
@@ -272,6 +272,7 @@ export const useStationsStore = defineStore('stations', () => {
     };
     categories.value.push(newCat);
     saveCategories();
+    return newCat.id;
   };
 
   const updateCategoryName = (id, newName) => {

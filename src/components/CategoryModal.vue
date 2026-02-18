@@ -22,11 +22,9 @@ const addToCategory = (categoryId) => {
 
 const createAndAdd = () => {
   if (newCategoryName.value.trim()) {
-    store.createCategory(newCategoryName.value.trim());
-    // Get the newly created category (last one)
-    const newCat = store.categories[store.categories.length - 1];
-    if (newCat && store.addingStation) {
-      store.addToCategory(newCat.id, store.addingStation);
+    const newId = store.createCategory(newCategoryName.value.trim());
+    if (newId && store.addingStation) {
+      store.addToCategory(newId, store.addingStation);
     }
     close();
   }

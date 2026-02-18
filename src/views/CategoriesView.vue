@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useStationsStore } from '../stores/stations';
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import StationCard from '../components/StationCard.vue';
@@ -32,13 +32,13 @@ watch(() => store.categories, (newVal) => {
 
 const createCategory = () => {
   if (newCategoryName.value.trim()) {
-    store.createCategory(newCategoryName.value.trim());
+    const newId = store.createCategory(newCategoryName.value.trim());
     newCategoryName.value = '';
     showCreateModal.value = false;
     
-    // Switch to new category (it's the last one added)
-    if (store.categories.length > 0) {
-        activeCategoryId.value = store.categories[store.categories.length - 1].id;
+    // Switch to new category
+    if (newId) {
+        activeCategoryId.value = newId;
     }
   }
 };
@@ -64,12 +64,13 @@ const removeFromCategory = (stationId) => {
 <template>
   <div class="p-6 pb-24 md:pb-6">
     <header class="flex justify-between items-center mb-8 mt-4 md:mt-0">
-      <h2 class="text-3xl font-bold text-white">Tu Biblioteca</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-white">Tu Biblioteca</h2>
       <button 
         @click="showCreateModal = !showCreateModal"
-        class="flex items-center gap-2 px-4 py-2 bg-primary text-black font-bold rounded-full hover:scale-105 transition-transform"
+        class="flex items-center gap-2 px-4 py-2 bg-primary text-black font-bold rounded-full hover:scale-105 transition-transform shadow-lg shadow-primary/20"
       >
         <PlusIcon class="w-5 h-5" />
+        <span class="md:hidden">Nueva</span>
         <span class="hidden md:inline">Nueva Categoría</span>
       </button>
     </header>
@@ -118,6 +119,15 @@ const removeFromCategory = (stationId) => {
             <TrashIcon class="w-4 h-4" />
           </span>
         </button>
+
+        <!-- Quick Add Button in Tabs -->
+        <button 
+          @click="showCreateModal = true"
+          class="px-4 py-3 rounded-lg font-bold bg-[#282828] text-gray-400 hover:text-white hover:bg-gray-700 transition-colors flex items-center justify-center"
+          title="Crear nueva categoría"
+        >
+          <PlusIcon class="w-5 h-5" />
+        </button>
       </div>
     </div>
 
@@ -144,8 +154,18 @@ const removeFromCategory = (stationId) => {
     <!-- Ad Inline - Categories -->
     <AdInline position="categories" v-if="activeCategoryId" />
 
-    <div v-else class="text-center py-20">
-       <p class="text-gray-400">Crea una categoría para organizar tus estaciones.</p>
+    <div v-else class="flex flex-col items-center justify-center py-20 text-center">
+       <div class="bg-gray-800 p-6 rounded-full mb-4">
+          <PlusIcon class="w-12 h-12 text-gray-500" />
+       </div>
+       <p class="text-gray-400 mb-6">Crea una categoría para organizar tus estaciones.</p>
+       <button 
+          @click="showCreateModal = true"
+          class="px-6 py-3 bg-primary text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2"
+       >
+          <PlusIcon class="w-5 h-5" />
+          Crear Categoría
+       </button>
     </div>
   </div>
 </template>
