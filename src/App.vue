@@ -14,6 +14,7 @@ const stationsStore = useStationsStore();
 const router = useRouter();
 const route = useRoute();
 const mainContent = ref(null);
+const rootApp = ref(null);
 const transitionName = ref('fade');
 
 // Define main navigation tabs in order
@@ -44,7 +45,7 @@ watch(() => route.path, (toPath, fromPath) => {
 });
 
 // Swipe Navigation
-const { direction, isSwiping, lengthX, lengthY } = useSwipe(mainContent, {
+const { direction, isSwiping, lengthX, lengthY } = useSwipe(rootApp, {
   passive: false,
   threshold: 30, // Native threshold support
   onSwipeEnd(e, direction) {
@@ -88,7 +89,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-screen bg-black text-white overflow-hidden">
+  <div ref="rootApp" class="flex h-screen bg-black text-white overflow-hidden touch-pan-y overscroll-x-none">
     <!-- Navigation -->
     <NavBar />
 
@@ -96,7 +97,7 @@ onMounted(() => {
     <main 
       id="main-content" 
       ref="mainContent" 
-      class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212] overflow-x-hidden touch-pan-y overscroll-x-none"
+      class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212] overflow-x-hidden"
     >
       <div class="min-h-full pb-24"> <!-- Padding for bottom player -->
         <RouterView v-slot="{ Component }">
