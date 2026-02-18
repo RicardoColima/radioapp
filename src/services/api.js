@@ -72,8 +72,8 @@ class RadioApiService {
     return result;
   }
 
-  async getStationsByCountry(country, limit = 20) {
-    return this.get(`/stations/bycountry/${encodeURIComponent(country)}`, { limit, hidebroken: true });
+  async getStationsByCountry(country, limit = 20, offset = 0) {
+    return this.get(`/stations/bycountry/${encodeURIComponent(country)}`, { limit, offset, hidebroken: true });
   }
   
   async getStationsByTag(tag, limit = 20, order = 'clickcount') {

@@ -1,14 +1,36 @@
 <script setup>
-import { onMounted } from 'vue';
-import { RouterView } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { RouterView, useRouter, useRoute } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 import Player from './components/Player.vue';
 import CategoryModal from './components/CategoryModal.vue';
 import { usePlayerStore } from './stores/player';
 import { useStationsStore } from './stores/stations';
+import { useSwipe } from '@vueuse/core';
 
 const playerStore = usePlayerStore();
 const stationsStore = useStationsStore();
+const router = useRouter();
+const route = useRoute();
+const mainContent = ref(null);
+
+// Scroll to top on route change
+watch(() => route.path, () => {
+  if (mainContent.value) {
+    mainContent.value.scrollTo({ top: 0, behavior: 'auto' });
+  }
+});
+
+// Swipe Navigation (Swipe Right to Go Back)
+const { direction, isSwiping, lengthX } = useSwipe(mainContent, {
+  passive: false,
+  onSwipeEnd(e, direction) {
+    // Only trigger if swipe is significant and strictly horizontal
+    if (direction === 'right' && lengthX.value < -100) {
+       router.back();
+    }
+  },
+});
 
 onMounted(() => {
   playerStore.init();
@@ -22,7 +44,7 @@ onMounted(() => {
     <NavBar />
 
     <!-- Main Content Area -->
-    <main class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212]">
+    <main id="main-content" ref="mainContent" class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212]">
       <div class="min-h-full pb-24"> <!-- Padding for bottom player -->
         <RouterView />
       </div>

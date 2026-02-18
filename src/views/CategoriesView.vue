@@ -5,9 +5,17 @@ import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import StationCard from '../components/StationCard.vue';
 import AdBanner from '../components/AdBanner.vue';
 import AdInline from '../components/AdInline.vue';
+import SkeletonLoader from '../components/SkeletonLoader.vue';
 
 const store = useStationsStore();
-store.init();
+const loading = ref(true);
+
+onMounted(() => {
+  store.init();
+  setTimeout(() => {
+    loading.value = false;
+  }, 500);
+});
 
 const newCategoryName = ref('');
 const showCreateModal = ref(false);
@@ -69,8 +77,17 @@ const removeFromCategory = (stationId) => {
     <!-- Ad Banner - Categories -->
     <AdBanner />
     
+    <div v-if="loading" class="mb-8">
+      <div class="flex gap-4 overflow-hidden">
+        <SkeletonLoader type="rectangle" :count="4" height="h-12" width="w-32" />
+      </div>
+      <div class="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+        <SkeletonLoader type="card" :count="10" height="h-48" />
+      </div>
+    </div>
+
     <!-- Inline Create Form -->
-    <div v-if="showCreateModal" class="mb-6 bg-[#282828] p-4 rounded-lg flex gap-2">
+    <div v-else-if="showCreateModal" class="mb-6 bg-[#282828] p-4 rounded-lg flex gap-2">
       <input 
         v-model="newCategoryName"
         @keyup.enter="createCategory"

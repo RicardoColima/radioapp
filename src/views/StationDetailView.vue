@@ -8,14 +8,17 @@ import StationCard from '../components/StationCard.vue';
 import AdBanner from '../components/AdBanner.vue';
 import AdInline from '../components/AdInline.vue';
 import ShareButton from '../components/ShareButton.vue';
-import { PlayIcon, PauseIcon, HeartIcon, PlusIcon, HandThumbUpIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
+import SkeletonLoader from '../components/SkeletonLoader.vue';
+import { PlayIcon, PauseIcon, HeartIcon, PlusIcon, HandThumbUpIcon, MagnifyingGlassIcon, ArrowsPointingOutIcon, ArrowsPointingInIcon } from '@heroicons/vue/24/solid';
 import { HeartIcon as HeartIconOutline, HandThumbUpIcon as HandThumbUpOutline } from '@heroicons/vue/24/outline';
-import { onClickOutside } from '@vueuse/core';
+import { onClickOutside, useFullscreen } from '@vueuse/core';
 
 const route = useRoute();
 const router = useRouter();
 const stationsStore = useStationsStore();
 const playerStore = usePlayerStore();
+const stationContainer = ref(null);
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(stationContainer);
 
 const station = ref(null);
 const loading = ref(true);
@@ -156,9 +159,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-6 pb-24 min-h-screen">
+  <div ref="stationContainer" class="p-6 pb-24 min-h-screen bg-[#121212] transition-all duration-300" :class="{ 'p-0 pb-0 flex flex-col justify-center': isFullscreen }">
     <!-- Header with Search -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <div v-if="!isFullscreen" class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <button @click="goBack" class="text-gray-400 hover:text-white flex items-center gap-2 self-start md:self-auto">
             &larr; Volver
         </button>
@@ -195,8 +198,36 @@ onMounted(() => {
         </div>
     </div>
 
-    <div v-if="loading" class="flex justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    <!-- Loading State -->
+    <div v-if="loading" class="animate-pulse">
+      <!-- Header Skeleton -->
+      <div class="flex flex-col md:flex-row gap-8 items-center md:items-end bg-gray-800/20 p-6 rounded-xl mb-8">
+        <SkeletonLoader type="rectangle" height="h-52" width="w-52" class="rounded-lg shrink-0" />
+        <div class="flex-1 w-full flex flex-col items-center md:items-start gap-4">
+          <SkeletonLoader type="text" height="h-4" width="w-24" />
+          <SkeletonLoader type="text" height="h-12" width="w-3/4" />
+          <SkeletonLoader type="text" height="h-6" width="w-1/2" />
+          <div class="flex gap-2">
+            <SkeletonLoader type="text" :count="3" height="h-8" width="w-16" />
+          </div>
+          <div class="flex gap-4 mt-4 w-full justify-center md:justify-start">
+             <SkeletonLoader type="rectangle" height="h-14" width="w-40" class="rounded-full" />
+             <SkeletonLoader type="circle" height="h-14" width="w-14" />
+             <SkeletonLoader type="circle" height="h-14" width="w-14" />
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats Skeleton -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <SkeletonLoader type="rectangle" :count="4" height="h-24" />
+      </div>
+
+      <!-- Related Skeleton -->
+      <div>
+        <SkeletonLoader type="text" height="h-8" width="w-64" class="mb-6" />
+        <SkeletonLoader type="card" :count="6" height="h-48" />
+      </div>
     </div>
 
     <div v-else-if="error" class="text-center py-20">
@@ -271,6 +302,14 @@ onMounted(() => {
                   size="normal"
                   class="p-3 rounded-full border border-gray-500 hover:border-white text-gray-400 hover:text-white transition-colors"
                 />
+
+                <button 
+                    @click="toggleFullscreen"
+                    class="p-3 rounded-full border border-gray-500 hover:border-white text-gray-400 hover:text-white transition-colors hidden md:block"
+                    title="Pantalla Completa"
+                >
+                    <component :is="isFullscreen ? ArrowsPointingInIcon : ArrowsPointingOutIcon" class="w-6 h-6" />
+                </button>
             </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import { onClickOutside } from '@vueuse/core';
 import AdBanner from '../components/AdBanner.vue';
 import AdInline from '../components/AdInline.vue';
 import ShareButton from '../components/ShareButton.vue';
+import SkeletonLoader from '../components/SkeletonLoader.vue';
 
 const router = useRouter();
 const stationsStore = useStationsStore();
@@ -184,8 +185,29 @@ onMounted(() => {
         </div>
     </div>
 
-    <div v-if="loading && !currentStation" class="flex justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    <div v-if="loading && !currentStation" class="animate-pulse">
+      <!-- Header Skeleton -->
+      <div class="flex flex-col md:flex-row gap-8 items-center md:items-end bg-gray-800/20 p-6 rounded-xl mb-8">
+        <SkeletonLoader type="rectangle" height="h-52" width="w-52" class="rounded-lg shrink-0" />
+        <div class="flex-1 w-full flex flex-col items-center md:items-start gap-4">
+          <SkeletonLoader type="text" height="h-4" width="w-32" />
+          <SkeletonLoader type="text" height="h-12" width="w-3/4" />
+          <SkeletonLoader type="text" height="h-6" width="w-1/2" />
+          <div class="flex gap-2">
+            <SkeletonLoader type="text" :count="3" height="h-8" width="w-16" />
+          </div>
+          <div class="flex gap-4 mt-4 w-full justify-center md:justify-start">
+             <SkeletonLoader type="rectangle" height="h-14" width="w-40" class="rounded-full" />
+             <SkeletonLoader type="circle" height="h-14" width="w-14" />
+             <SkeletonLoader type="circle" height="h-14" width="w-14" />
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats Skeleton -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <SkeletonLoader type="rectangle" :count="4" height="h-24" />
+      </div>
     </div>
 
     <div v-else-if="error" class="text-center py-20">

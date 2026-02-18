@@ -6,6 +6,7 @@ import { usePlayerStore } from '../stores/player';
 import StationCard from '../components/StationCard.vue';
 import AdBanner from '../components/AdBanner.vue';
 import AdInline from '../components/AdInline.vue';
+import SkeletonLoader from '../components/SkeletonLoader.vue';
 import { PlayIcon, MagnifyingGlassIcon, ArrowPathIcon } from '@heroicons/vue/24/solid';
 import { radioApi } from '../services/api';
 import { onClickOutside } from '@vueuse/core';
@@ -13,6 +14,49 @@ import { onClickOutside } from '@vueuse/core';
 const store = useStationsStore();
 const playerStore = usePlayerStore();
 const router = useRouter();
+
+// Pull to Refresh Logic
+const pullStart = ref(0);
+const pullDistance = ref(0);
+const isRefreshing = ref(false);
+const scrollContainer = ref(null); // If we were scrolling a specific container, but here it's window/body usually or main
+
+const onTouchStart = (e) => {
+  // Only enable if we are at the top of the page
+  if (window.scrollY <= 10) {
+    pullStart.value = e.touches[0].clientY;
+  }
+};
+
+const onTouchMove = (e) => {
+  if (pullStart.value > 0 && window.scrollY <= 10) {
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - pullStart.value;
+    
+    if (diff > 0) {
+      // Add resistance
+      pullDistance.value = Math.pow(diff, 0.8);
+    }
+  }
+};
+
+const onTouchEnd = async () => {
+  if (pullDistance.value > 80) { // Threshold to trigger refresh
+    isRefreshing.value = true;
+    pullDistance.value = 60; // Snap to loading position
+    try {
+      await store.fetchHomeData();
+    } finally {
+      setTimeout(() => {
+        isRefreshing.value = false;
+        pullDistance.value = 0;
+      }, 500);
+    }
+  } else {
+    pullDistance.value = 0;
+  }
+  pullStart.value = 0;
+};
 
 const currentHeroIndex = ref(0);
 let heroInterval;
@@ -103,7 +147,23 @@ const reloadDiscovery = () => {
 </script>
 
 <template>
-  <div class="p-6 pb-24">
+  <div 
+    class="p-6 pb-24 relative" 
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+  >
+     <!-- Pull to Refresh Indicator -->
+     <div 
+        class="absolute left-0 right-0 flex justify-center pointer-events-none transition-all duration-300 z-50"
+        :style="{ top: `${Math.min(pullDistance, 100) - 50}px` }"
+        v-if="pullDistance > 0 || isRefreshing"
+     >
+        <div class="bg-white rounded-full p-2 shadow-lg">
+            <ArrowPathIcon class="w-6 h-6 text-primary" :class="{ 'animate-spin': isRefreshing }" :style="{ transform: `rotate(${pullDistance * 2}deg)` }" />
+        </div>
+     </div>
+
      <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-6 gap-4">
         <div>
             <h2 class="text-3xl font-bold text-white">{{ getGreeting() }}</h2>
@@ -240,7 +300,7 @@ const reloadDiscovery = () => {
       
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <template v-if="store.loading && store.topStations.length === 0">
-           <div v-for="n in 6" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="6" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.topStations.slice(0, 6)" :key="station.stationuuid" :station="station" />
@@ -260,7 +320,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.trendingStations.length === 0">
-           <div v-for="n in 8" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="8" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.trendingStations.slice(0, 8)" :key="station.stationuuid" :station="station" />
@@ -277,7 +337,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.latinStations.length === 0">
-           <div v-for="n in 16" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="16" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.latinStations" :key="station.stationuuid" :station="station" />
@@ -294,7 +354,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.rockStations.length === 0">
-           <div v-for="n in 16" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="16" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.rockStations" :key="station.stationuuid" :station="station" />
@@ -311,7 +371,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.popStations.length === 0">
-           <div v-for="n in 16" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="16" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.popStations" :key="station.stationuuid" :station="station" />
@@ -328,7 +388,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.newsStations.length === 0">
-           <div v-for="n in 16" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="16" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.newsStations" :key="station.stationuuid" :station="station" />
@@ -345,7 +405,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.electroStations.length === 0">
-           <div v-for="n in 16" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="16" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.electroStations" :key="station.stationuuid" :station="station" />
@@ -362,7 +422,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
          <template v-if="store.loading && store.sportsStations.length === 0">
-           <div v-for="n in 16" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="16" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.sportsStations" :key="station.stationuuid" :station="station" />
@@ -385,7 +445,7 @@ const reloadDiscovery = () => {
       
        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 xl:grid-cols-9 gap-4">
          <template v-if="store.loading && store.randomDiscoveryStations.length === 0">
-           <div v-for="n in 36" :key="n" class="bg-[#181818] h-48 rounded-md animate-pulse"></div>
+           <SkeletonLoader type="card" :count="36" height="h-48" />
         </template>
         <template v-else>
             <StationCard v-for="station in store.randomDiscoveryStations" :key="station.stationuuid" :station="station" />

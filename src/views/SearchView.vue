@@ -6,7 +6,9 @@ import StationCard from '../components/StationCard.vue';
 import SearchBar from '../components/SearchBar.vue';
 import AdBanner from '../components/AdBanner.vue';
 import AdInline from '../components/AdInline.vue';
+import SkeletonLoader from '../components/SkeletonLoader.vue';
 import { FunnelIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline';
+import { useIntersectionObserver } from '@vueuse/core';
 
 const store = useStationsStore();
 const route = useRoute();
@@ -14,6 +16,7 @@ const router = useRouter();
 
 const searchQuery = ref('');
 const showFilters = ref(false);
+const loadMoreTrigger = ref(null);
 
 const filters = ref({
   country: '',
@@ -22,6 +25,12 @@ const filters = ref({
   bitrate: '',
   sort: 'clickcount'
 });
+
+// Pagination state
+const offset = ref(0);
+const limit = 20;
+const hasMore = ref(true);
+const loadingMore = ref(false);
 
 const sortOptions = [
   { label: 'Popularidad', value: 'clickcount' },
@@ -52,23 +61,59 @@ const handleSearch = (query) => {
   performSearch(query);
 };
 
-const performSearch = (query) => {
-  if (!query && !filters.value.country && !filters.value.genre && !filters.value.language && !filters.value.bitrate && filters.value.sort === 'clickcount') {
-      store.searchTopStations();
-      return;
+const performSearch = async (query, isLoadMore = false) => {
+  if (isLoadMore) {
+    if (!hasMore.value || loadingMore.value) return;
+    loadingMore.value = true;
+  } else {
+    // Scroll main content to top on new search/filters
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) mainContent.scrollTop = 0;
+    
+    offset.value = 0;
+    hasMore.value = true;
+    // Store loading is handled by store actions when append is false
   }
 
-  const params = {
-    name: query,
-    country: filters.value.country,
-    tag: filters.value.genre,
-    language: filters.value.language,
-    bitrateMin: filters.value.bitrate,
-    order: filters.value.sort === 'random' ? '' : filters.value.sort,
-    reverse: filters.value.sort !== 'name'
-  };
-  
-  store.search(params);
+  let results = [];
+  try {
+    
+    const preCount = store.searchResults.length;
+
+    if (!query && !filters.value.country && !filters.value.genre && !filters.value.language && !filters.value.bitrate && filters.value.sort === 'clickcount') {
+        results = await store.searchTopStations(limit, offset.value, isLoadMore);
+    } else {
+        const params = {
+            name: query,
+            country: filters.value.country,
+            tag: filters.value.genre,
+            language: filters.value.language,
+            bitrateMin: filters.value.bitrate,
+            order: filters.value.sort === 'random' ? '' : filters.value.sort,
+            reverse: filters.value.sort !== 'name',
+            limit,
+            offset: offset.value
+        };
+        
+        results = await store.search(params, isLoadMore);
+    }
+
+    // Progress Check: If we got results from API but the store length didn't increase,
+    // it means they were all duplicates. Stop pagination to prevent loop.
+    const postCount = store.searchResults.length;
+    if (isLoadMore && results.length > 0 && postCount === preCount) {
+        hasMore.value = false;
+    } else if (results.length < limit) {
+        hasMore.value = false;
+    }
+    
+    offset.value += results.length;
+  } catch (e) {
+      console.error(e);
+      if (isLoadMore) hasMore.value = false; // Stop on error during scroll
+  } finally {
+      loadingMore.value = false;
+  }
 };
 
 const updateFilter = () => {
@@ -108,6 +153,24 @@ onMounted(() => {
 watch(() => route.query, () => {
   syncFromUrl();
 });
+
+let timeout = null;
+
+useIntersectionObserver(
+  loadMoreTrigger,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting && !store.loading && !loadingMore.value && hasMore.value) {
+      if (timeout) clearTimeout(timeout);
+      
+      timeout = setTimeout(() => {
+        if (!store.loading && !loadingMore.value && hasMore.value) {
+          performSearch(searchQuery.value, true);
+        }
+      }, 800);
+    }
+  },
+  { threshold: 0.1 }
+);
 </script>
 
 <template>
@@ -211,8 +274,8 @@ watch(() => route.query, () => {
     </div>
 
     <!-- Results -->
-    <div v-else-if="store.loading" class="flex justify-center py-20">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    <div v-else-if="store.loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <SkeletonLoader type="card" :count="10" height="h-48" />
     </div>
 
     <div v-else-if="store.searchResults.length > 0">
@@ -231,6 +294,16 @@ watch(() => route.query, () => {
       
       <!-- Ad Inline - Search Results -->
       <AdInline position="search" />
+      
+      <!-- Infinite Scroll Trigger - Keep in DOM to prevent flickering -->
+      <div ref="loadMoreTrigger" class="h-10 w-full" v-if="hasMore"></div>
+
+      <!-- Loading Spinner - Reserve space to prevent layout shifts -->
+      <div class="py-8 flex justify-center w-full transition-opacity duration-300" 
+           :class="loadingMore ? 'opacity-100' : 'opacity-0'"
+           v-show="hasMore || loadingMore">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+      </div>
     </div>
 
     <div v-else class="flex flex-col items-center justify-center py-20 text-center">

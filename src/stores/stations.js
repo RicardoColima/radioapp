@@ -178,25 +178,44 @@ export const useStationsStore = defineStore('stations', () => {
     }
   };
 
-  const searchTopStations = async (limit = 20) => {
-    loading.value = true;
+  const searchTopStations = async (limit = 20, offset = 0, append = false) => {
+    if (!append) loading.value = true;
     try {
-      searchResults.value = await radioApi.getTopStations(limit);
+      // Use searchStations for consistency and offset support
+      const results = await radioApi.searchStations({ limit, offset, order: 'clickcount', reverse: true });
+      if (append) {
+        const existingIds = new Set(searchResults.value.map(s => s.stationuuid));
+        const uniqueNew = results.filter(s => !existingIds.has(s.stationuuid));
+        searchResults.value.push(...uniqueNew);
+      } else {
+        searchResults.value = results;
+      }
+      return results;
     } catch (e) {
       error.value = 'Error al cargar las estaciones populares.';
+      return [];
     } finally {
-      loading.value = false;
+      if (!append) loading.value = false;
     }
   };
 
-  const search = async (params) => {
-    loading.value = true;
+  const search = async (params, append = false) => {
+    if (!append) loading.value = true;
     try {
-      searchResults.value = await radioApi.searchStations(params);
+      const results = await radioApi.searchStations(params);
+      if (append) {
+        const existingIds = new Set(searchResults.value.map(s => s.stationuuid));
+        const uniqueNew = results.filter(s => !existingIds.has(s.stationuuid));
+        searchResults.value.push(...uniqueNew);
+      } else {
+        searchResults.value = results;
+      }
+      return results;
     } catch (e) {
       error.value = 'Error en la búsqueda. Verifique su conexión.';
+      return [];
     } finally {
-      loading.value = false;
+      if (!append) loading.value = false;
     }
   };
 

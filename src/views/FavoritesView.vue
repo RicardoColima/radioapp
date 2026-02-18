@@ -1,15 +1,21 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useStationsStore } from '../stores/stations';
 import StationCard from '../components/StationCard.vue';
 import AdBanner from '../components/AdBanner.vue';
 import AdInline from '../components/AdInline.vue';
+import SkeletonLoader from '../components/SkeletonLoader.vue';
 import { HeartIcon } from '@heroicons/vue/24/solid';
 
 const store = useStationsStore();
+const loading = ref(true);
 
-// Ensure favorites are loaded
-store.init();
+onMounted(() => {
+  store.init();
+  setTimeout(() => {
+    loading.value = false;
+  }, 500); // Simulate short load for better UX
+});
 
 const hasFavorites = computed(() => store.favorites.length > 0);
 </script>
@@ -29,7 +35,11 @@ const hasFavorites = computed(() => store.favorites.length > 0);
     <!-- Ad Banner - Favorites -->
     <AdBanner />
 
-    <div v-if="hasFavorites" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+    <div v-if="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <SkeletonLoader type="card" :count="5" height="h-48" />
+    </div>
+
+    <div v-else-if="hasFavorites" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
       <StationCard 
         v-for="station in store.favorites" 
         :key="station.stationuuid" 
@@ -40,7 +50,7 @@ const hasFavorites = computed(() => store.favorites.length > 0);
     <!-- Ad Inline - Favorites -->
     <AdInline position="favorites" v-if="hasFavorites" />
 
-    <div v-else class="flex flex-col items-center justify-center py-20 text-center">
+    <div v-else-if="!loading" class="flex flex-col items-center justify-center py-20 text-center">
       <p class="text-gray-400">Aún no has agregado estaciones a tus favoritos.</p>
       <router-link to="/search" class="mt-4 px-6 py-2 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform">
         Buscar Estaciones
