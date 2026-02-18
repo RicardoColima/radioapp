@@ -14,21 +14,66 @@ const stationsStore = useStationsStore();
 const router = useRouter();
 const route = useRoute();
 const mainContent = ref(null);
+const transitionName = ref('fade');
 
-// Scroll to top on route change
-watch(() => route.path, () => {
+// Define main navigation tabs in order
+const mainTabs = [
+  '/',
+  '/search',
+  '/countries',
+  '/favorites',
+  '/categories',
+  '/random',
+  '/acerca'
+];
+
+// Scroll to top on route change & Determine transition
+watch(() => route.path, (toPath, fromPath) => {
   if (mainContent.value) {
     mainContent.value.scrollTo({ top: 0, behavior: 'auto' });
   }
+
+  const toIndex = mainTabs.indexOf(toPath);
+  const fromIndex = mainTabs.indexOf(fromPath);
+
+  if (toIndex !== -1 && fromIndex !== -1) {
+    transitionName.value = toIndex > fromIndex ? 'slide-left' : 'slide-right';
+  } else {
+    transitionName.value = 'fade';
+  }
 });
 
-// Swipe Navigation (Swipe Right to Go Back)
-const { direction, isSwiping, lengthX } = useSwipe(mainContent, {
+// Swipe Navigation
+const { direction, isSwiping, lengthX, lengthY } = useSwipe(mainContent, {
   passive: false,
   onSwipeEnd(e, direction) {
-    // Only trigger if swipe is significant and strictly horizontal
-    if (direction === 'right' && lengthX.value < -100) {
-       router.back();
+    const currentPath = route.path;
+    const currentIndex = mainTabs.indexOf(currentPath);
+    const swipeThreshold = 50; // Minimum distance to trigger swipe
+
+    // Check if movement is horizontal (horizontal distance > vertical distance)
+    const isHorizontalSwipe = Math.abs(lengthX.value) > Math.abs(lengthY.value);
+
+    if (!isHorizontalSwipe) return;
+
+    // If we are on a main tab
+    if (currentIndex !== -1) {
+       if (direction === 'left' && Math.abs(lengthX.value) > swipeThreshold) {
+         // Next Tab
+         if (currentIndex < mainTabs.length - 1) {
+           router.push(mainTabs[currentIndex + 1]);
+         }
+       } else if (direction === 'right' && Math.abs(lengthX.value) > swipeThreshold) {
+         // Previous Tab
+         if (currentIndex > 0) {
+           router.push(mainTabs[currentIndex - 1]);
+         }
+       }
+    } else {
+      // If NOT on a main tab (e.g. details page), Swipe Right to Go Back
+      if (direction === 'right' && lengthX.value < -swipeThreshold) {
+         router.back();
+      }
     }
   },
 });
@@ -45,9 +90,13 @@ onMounted(() => {
     <NavBar />
 
     <!-- Main Content Area -->
-    <main id="main-content" ref="mainContent" class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212]">
+    <main id="main-content" ref="mainContent" class="flex-1 relative h-full overflow-y-auto w-full md:pl-64 bg-gradient-to-b from-[#1e1e1e] to-[#121212] overflow-x-hidden">
       <div class="min-h-full pb-24"> <!-- Padding for bottom player -->
-        <RouterView />
+        <RouterView v-slot="{ Component }">
+          <Transition :name="transitionName" mode="out-in">
+            <component :is="Component" />
+          </Transition>
+        </RouterView>
       </div>
     </main>
 
@@ -68,45 +117,44 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Page Transitions */
-.page-enter-active,
-.page-leave-active {
+/* Base Transition Classes */
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active,
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.page-enter-from {
+/* Slide Left (Next Tab) */
+.slide-left-enter-from {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateX(20px);
 }
-
-.page-leave-to {
+.slide-left-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateX(-20px);
 }
 
-/* Entrance Animations */
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.stagger-item {
+/* Slide Right (Prev Tab) */
+.slide-right-enter-from {
   opacity: 0;
-  animation: slideIn 0.5s ease-out forwards;
+  transform: translateX(-20px);
+}
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Default Fade */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Ensure no horizontal scroll during transition */
+main {
+  overflow-x: hidden;
 }
 </style>
